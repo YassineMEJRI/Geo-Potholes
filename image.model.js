@@ -1,5 +1,3 @@
-// Step 3 - this is the code for ./models.js
-
 var mongoose = require('mongoose');
 
 var imageSchema = new mongoose.Schema({
@@ -9,7 +7,11 @@ var imageSchema = new mongoose.Schema({
 	{
 		data: Buffer,
 		contentType: String
-	}
+	},
+	location: mongoose.Schema({
+		type: String,
+		coordinates: [[[Number]]]
+	  })
 });
 
 //Image is a model which has a schema imageSchema

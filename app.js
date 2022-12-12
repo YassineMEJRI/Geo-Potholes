@@ -59,6 +59,7 @@ app.get('/images', (req, res) => {
 });
 
 app.post('/upload', upload.single('image'), (req, res, next) => {
+	locationJson = JSON.parse(req.body.location)
 
 	var obj = {
 		name: req.body.name,
@@ -66,6 +67,10 @@ app.post('/upload', upload.single('image'), (req, res, next) => {
 		img: {
 			data: fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename)),
 			contentType: 'image/png'
+		},
+		location: {
+			type: locationJson.type,
+			coordinates: locationJson.coordinates
 		}
 	}
 	imgModel.create(obj, (err, item) => {
