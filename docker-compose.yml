@@ -1,0 +1,33 @@
+version: '3'
+services:
+  mongo:
+    container_name: mongo
+    image: mongo
+    volumes:
+      - /home/yecin/Projects/Geo-Potholes/data:/data/db
+    networks:
+      - mongo-network
+    ports:
+      - 27017:27017
+    healthcheck:
+      test: "exit 0"
+
+  mongo-express:
+    container_name: mongo-express
+    image: mongo-express
+    environment:
+      - ME_CONFIG_OPTIONS_EDITORTHEME="ambiance"
+      - ME_CONFIG_MONGODB_SERVER=mongo
+      - ME_CONFIG_BASICAUTH_USERNAME=root
+      - ME_CONFIG_BASICAUTH_PASSWORD=root
+    ports:
+      - 8081:8081
+    depends_on:
+      mongo:
+        condition: service_healthy
+    networks:
+      - mongo-network
+
+networks:
+  mongo-network:
+    driver: bridge
