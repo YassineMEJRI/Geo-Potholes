@@ -10,10 +10,15 @@
         #map { height: 100vh; }
      </style>
     </head>
+
     <body>
         <div id="map"></div>
-        <script type="text/javascript">
-            var map = L.map('map').setView([36.8137, 10.063949], 13);
+            <script type="text/javascript">
+            var imgs = JSON.parse('<%- JSON.stringify(images) %>')
+            var img = JSON.parse('<%= images.toString("base64") %>')
+            console.log(img)
+
+            var map = L.map('map').setView([36.8137, 10.063949], 13)
             L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 maxZoom: 19,
                 attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
@@ -33,6 +38,19 @@
 
             var ensi_marker = L.marker([36.8137, 10.063949]).addTo(map);
             ensi_marker.bindPopup("<b>ENSI</b><br>")
+
+            // var geoJsonLayer = L.geoJSON().addTo(map);
+
+            for(let i = 0; i < imgs.length; i++) {
+                // geoJsonLayer.addData('{ type: "Point", coordinates: [ 36, 10 ] }')
+                let lng = imgs[i].location.coordinates[0][0][0];
+                let lat = imgs[i].location.coordinates[0][0][1];
+                let img_contentType = imgs[i].img.contentType;
+
+
+                let img_marker = L.marker([lng, lat]).addTo(map);
+                img_marker.bindPopup(imgs[i].name)
+            }
 
          </script>
     </body>
