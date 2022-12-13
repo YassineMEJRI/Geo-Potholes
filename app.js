@@ -42,8 +42,17 @@ app.set("view engine", "ejs");
 app.get('/', (req, res) => {
     res.send('Hello World');
 });
+
 app.get('/map', (req, res) => {
-    res.render('map')
+    imgModel.find({},'-_id name desc location', (err, images) => {
+		if (err) {
+			console.log(err);
+			res.status(500).send('An error occurred', err);
+		}
+		else {
+			res.render('map', { images: images });
+		}
+	});
 });
 
 app.get('/images', (req, res) => {
@@ -59,8 +68,7 @@ app.get('/images', (req, res) => {
 });
 
 app.post('/upload', upload.single('image'), (req, res, next) => {
-	locationJson = JSON.parse(req.body.location)
-
+	
 	var obj = {
 		name: req.body.name,
 		desc: req.body.desc,
@@ -69,8 +77,8 @@ app.post('/upload', upload.single('image'), (req, res, next) => {
 			contentType: 'image/png'
 		},
 		location: {
-			type: locationJson.type,
-			coordinates: locationJson.coordinates
+			type: "Point",
+			coordinates:[ req.body.longitude, req.body.latitude]
 		}
 	}
 	imgModel.create(obj, (err, item) => {
