@@ -8,6 +8,9 @@
      crossorigin=""></script>
      <style>
         #map { height: 100vh; }
+        .container {
+            width: fit-content;
+        }
      </style>
     </head>
 
@@ -15,8 +18,6 @@
         <div id="map"></div>
             <script type="text/javascript">
             var imgs = JSON.parse('<%- JSON.stringify(images) %>')
-            var img = JSON.parse('<%= images.toString("base64") %>')
-            console.log(img)
 
             var map = L.map('map').setView([36.8137, 10.063949], 13)
             L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -45,11 +46,10 @@
                 // geoJsonLayer.addData('{ type: "Point", coordinates: [ 36, 10 ] }')
                 let lng = imgs[i].location.coordinates[0][0][0];
                 let lat = imgs[i].location.coordinates[0][0][1];
-                let img_contentType = imgs[i].img.contentType;
-
-
+                let name = imgs[i].name;
+                let desc = imgs[i].desc;
                 let img_marker = L.marker([lng, lat]).addTo(map);
-                img_marker.bindPopup(imgs[i].name)
+                img_marker.bindPopup("<h1>"+name+"</h1><p>"+desc+"</p><img width=\"300px\" src='/pothole_picture/"+imgs[i]._id+"'></img></div>")
             }
 
          </script>

@@ -44,7 +44,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/map', (req, res) => {
-    imgModel.find({},'-_id name desc location', (err, images) => {
+    imgModel.find({},'_id name desc location.type location.coordinates', (err, images) => {
 		if (err) {
 			console.log(err);
 			res.status(500).send('An error occurred', err);
@@ -54,6 +54,28 @@ app.get('/map', (req, res) => {
 		}
 	});
 });
+
+app.get('/potholes', (req, res) => {
+    imgModel.find({},'_id name desc img location.type location.coordinates', (err, images) => {
+		if (err) {
+			console.log(err);
+			res.status(500).send('An error occurred', err);
+		}
+		else {
+			res.setHeader('Content-Type', 'application/json');
+			res.json(images);
+		}
+	});
+});
+
+app.get('/pothole_picture/:potId', function(req, res, next) {
+	imgModel.findOne({
+	  _id: req.params.potId
+	}).then(function(img) {
+	  res.status(200).send(img.img.data);
+	});
+  });
+  
 
 app.get('/images', (req, res) => {
 	imgModel.find({}, (err, items) => {
