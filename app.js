@@ -10,6 +10,7 @@ const path = require('path');
 
 const imgModel = require('./image.model')
 
+
 var multer = require('multer');
 
 var storage = multer.diskStorage({
@@ -56,7 +57,7 @@ app.get('/map', (req, res) => {
 });
 
 app.get('/potholes', (req, res) => {
-    imgModel.find({},'_id name desc img location.type location.coordinates', (err, images) => {
+    imgModel.find({},'_id name desc location.type location.coordinates', (err, images) => {
 		if (err) {
 			console.log(err);
 			res.status(500).send('An error occurred', err);
